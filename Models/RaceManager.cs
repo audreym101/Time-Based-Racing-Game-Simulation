@@ -58,6 +58,11 @@ namespace TimeBasedRacingGame.Models
         public string RaceResult { get; private set; }
 
         /// <summary>
+        /// Gets the current race state
+        /// </summary>
+        public RaceState RaceState { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the RaceManager class
         /// </summary>
         /// <param name="maxTime">Maximum race time in seconds</param>
@@ -68,6 +73,7 @@ namespace TimeBasedRacingGame.Models
             Track = new Track();
             IsRaceActive = false;
             RaceResult = "";
+            RaceState = new RaceState();
 
             AvailableCars = new List<Car>
             {
@@ -80,11 +86,11 @@ namespace TimeBasedRacingGame.Models
         /// <summary>
         /// Starts the race with the selected car
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when no car is selected</exception>
+        /// <exception cref="RaceException">Thrown when no car is selected</exception>
         public void StartRace()
         {
             if (SelectedCar == null)
-                throw new InvalidOperationException("No car selected");
+                throw new RaceException("No car selected for race start");
 
             IsRaceActive = true;
             RaceResult = "";
@@ -93,17 +99,26 @@ namespace TimeBasedRacingGame.Models
             Track.LapProgress = 0;
             SelectedCar.CurrentSpeed = 0;
             SelectedCar.CurrentFuel = SelectedCar.MaxFuel;
+            
+            // Update race state
+            RaceState.IsActive = true;
+            RaceState.CurrentLap = 1;
+            RaceState.LapProgress = 0;
+            RaceState.TimeRemaining = MaxTime;
+            RaceState.CurrentFuel = SelectedCar.CurrentFuel;
+            RaceState.CurrentSpeed = 0;
+            RaceState.LogAction($"Race started with {SelectedCar.Name}");
         }
 
         /// <summary>
         /// Executes a race action and updates game state
         /// </summary>
         /// <param name="action">The action to perform</param>
-        /// <exception cref="InvalidOperationException">Thrown when race is not active or action is invalid</exception>
+        /// <exception cref="RaceException">Thrown when race is not active or action is invalid</exception>
         public void ExecuteAction(RaceAction action)
         {
             if (!IsRaceActive)
-                throw new InvalidOperationException("Race is not active");
+                throw new RaceException("Cannot execute action - race is not active");
 
             try
             {
@@ -111,19 +126,23 @@ namespace TimeBasedRacingGame.Models
                 {
                     case RaceAction.SpeedUp:
                         SpeedUp();
+                        RaceState.LogAction("Speed increased");
                         break;
                     case RaceAction.MaintainSpeed:
                         MaintainSpeed();
+                        RaceState.LogAction("Speed maintained");
                         break;
                     case RaceAction.PitStop:
                         PitStop();
+                        RaceState.LogAction("Pit stop completed");
                         break;
                 }
 
                 UpdateGameState();
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                RaceState.LogAction($"Action failed: {ex.Message}");
                 EndRace("Out of fuel!");
             }
         }
@@ -153,8 +172,12 @@ namespace TimeBasedRacingGame.Models
         /// <summary>
         /// Performs a pit stop to refuel
         /// </summary>
+        /// <exception cref="RaceException">Thrown when fuel tank is already full</exception>
         private void PitStop()
         {
+            if (SelectedCar.CurrentFuel >= SelectedCar.MaxFuel * 0.95) // 95% full threshold
+                throw new RaceException("Cannot pit stop - fuel tank is already full");
+                
             SelectedCar.Refuel();
             SelectedCar.CurrentSpeed = 0;
             TimeRemaining -= 15;
@@ -170,9 +193,16 @@ namespace TimeBasedRacingGame.Models
                 bool lapCompleted = Track.AdvanceProgress(SelectedCar.CurrentSpeed);
                 if (lapCompleted && !Track.IsRaceCompleted())
                 {
-                    // Lap completed notification could be added here
+                    RaceState.LogAction($"Lap {Track.CurrentLap - 1} completed!");
                 }
             }
+
+            // Update race state
+            RaceState.CurrentLap = Track.CurrentLap;
+            RaceState.LapProgress = Track.LapProgress;
+            RaceState.TimeRemaining = TimeRemaining;
+            RaceState.CurrentFuel = SelectedCar.CurrentFuel;
+            RaceState.CurrentSpeed = SelectedCar.CurrentSpeed;
 
             CheckRaceConditions();
         }

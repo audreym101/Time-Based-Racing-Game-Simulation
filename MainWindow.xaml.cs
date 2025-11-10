@@ -70,6 +70,10 @@ namespace TimeBasedRacingGame
                 gameTimer.Start();
                 UpdateUI();
             }
+            catch (RaceException ex)
+            {
+                MessageBox.Show(ex.Message, "Race Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (InvalidOperationException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -115,6 +119,10 @@ namespace TimeBasedRacingGame
                 {
                     EndRace();
                 }
+            }
+            catch (RaceException ex)
+            {
+                MessageBox.Show(ex.Message, "Race Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (InvalidOperationException ex)
             {
@@ -167,6 +175,9 @@ namespace TimeBasedRacingGame
 
                 // Update progress indicator
                 ProgressIndicatorLabel.Text = raceManager.Track.GetProgressIndicator();
+                
+                // Update action log
+                ActionLogTextBlock.Text = raceManager.RaceState.GetActionLogText();
 
                 // Update status
                 if (raceManager.IsRaceActive)

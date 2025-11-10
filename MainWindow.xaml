@@ -32,6 +32,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -70,8 +71,15 @@
             <TextBlock Grid.Row="5" Grid.Column="1" x:Name="ProgressIndicatorLabel" Text="[          ]" 
                        Margin="10,5" FontFamily="Consolas" FontWeight="Bold"/>
 
+            <!-- Action Log -->
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Action Log:" Margin="0,5" VerticalAlignment="Top"/>
+            <ScrollViewer Grid.Row="6" Grid.Column="1" Margin="10,5" Height="80" VerticalScrollBarVisibility="Auto">
+                <TextBlock x:Name="ActionLogTextBlock" Text="" FontFamily="Consolas" FontSize="10" 
+                           TextWrapping="Wrap" VerticalAlignment="Top"/>
+            </ScrollViewer>
+            
             <!-- Race Result -->
-            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" x:Name="RaceResultLabel" 
+            <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="RaceResultLabel" 
                        Text="" FontSize="16" FontWeight="Bold" Foreground="Red" 
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>

@@ -33,7 +33,7 @@ namespace TimeBasedRacingGame.UnitTests
         /// Tests race start without car selection
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof(RaceException))]
         public void StartRace_NoCar_ThrowsException()
         {
             // Arrange
