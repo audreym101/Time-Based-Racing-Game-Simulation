@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 using TimeBasedRacingGame.Models;
 
@@ -188,6 +189,21 @@ namespace TimeBasedRacingGame
                 {
                     RaceStatusLabel.Text = "Race finished";
                     RaceResultLabel.Text = raceManager.RaceResult;
+                    RaceResultBorder.Visibility = Visibility.Visible;
+                    
+                    // Change border color based on result
+                    if (raceManager.RaceResult.Contains("won") || raceManager.RaceResult.Contains("completed"))
+                    {
+                        RaceResultBorder.Background = new SolidColorBrush(Color.FromRgb(76, 175, 80)); // Green
+                    }
+                    else
+                    {
+                        RaceResultBorder.Background = new SolidColorBrush(Color.FromRgb(244, 67, 54)); // Red
+                    }
+                }
+                else
+                {
+                    RaceResultBorder.Visibility = Visibility.Collapsed;
                 }
             }
         }
