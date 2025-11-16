@@ -77,9 +77,9 @@ namespace TimeBasedRacingGame.Models
 
             AvailableCars = new List<Car>
             {
-                new Car(CarType.SportsCar, "Lightning Bolt", 120, 8.0, 60),
-                new Car(CarType.EcoCar, "Green Machine", 80, 4.0, 80),
-                new Car(CarType.RaceCar, "Speed Demon", 150, 12.0, 50)
+                new Car(CarType.SportsCar, "NEON STRIKER", 120, 8.0, 60),
+                new Car(CarType.EcoCar, "CYBER CRUISER", 80, 4.0, 80),
+                new Car(CarType.RaceCar, "PLASMA PHANTOM", 150, 12.0, 50)
             };
         }
 
