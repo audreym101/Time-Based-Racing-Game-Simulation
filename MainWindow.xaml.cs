@@ -177,6 +177,9 @@ namespace TimeBasedRacingGame
                 // Update progress indicator
                 ProgressIndicatorLabel.Text = raceManager.Track.GetProgressIndicator();
                 
+                // Update position
+                PositionLabel.Text = raceManager.GetPlayerPosition();
+                
                 // Update action log
                 ActionLogTextBlock.Text = raceManager.RaceState.GetActionLogText();
 

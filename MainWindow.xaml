@@ -58,6 +58,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -103,16 +104,22 @@
                 <TextBlock Grid.Row="4" Grid.Column="1" x:Name="RaceStatusLabel" Text="Select a car to start" 
                            Margin="15,8" Foreground="#FFC107" FontWeight="Bold" FontFamily="Segoe UI" FontSize="14"/>
 
-                <!-- Progress Indicator -->
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="🏁 Lap Progress:" Margin="0,8" 
+                <!-- Race Position -->
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="🏆 Position:" Margin="0,8" 
                            VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontFamily="Segoe UI" FontSize="14"/>
-                <TextBlock Grid.Row="5" Grid.Column="1" x:Name="ProgressIndicatorLabel" Text="[          ]" 
+                <TextBlock Grid.Row="5" Grid.Column="1" x:Name="PositionLabel" Text="1st" 
+                           Margin="15,8" FontWeight="Bold" Foreground="#FFD700" FontSize="16" FontFamily="Segoe UI"/>
+
+                <!-- Progress Indicator -->
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="🏁 Lap Progress:" Margin="0,8" 
+                           VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontFamily="Segoe UI" FontSize="14"/>
+                <TextBlock Grid.Row="6" Grid.Column="1" x:Name="ProgressIndicatorLabel" Text="[          ]" 
                            Margin="15,8" FontFamily="Consolas" FontWeight="Bold" Foreground="#9C27B0" FontSize="14"/>
 
                 <!-- Action Log -->
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="📜 Action Log:" Margin="0,8" 
+                <TextBlock Grid.Row="7" Grid.Column="0" Text="📜 Action Log:" Margin="0,8" 
                            VerticalAlignment="Top" Foreground="White" FontWeight="Bold" FontFamily="Segoe UI" FontSize="14"/>
-                <Border Grid.Row="6" Grid.Column="1" Margin="15,8" Background="#2a2a2a" 
+                <Border Grid.Row="7" Grid.Column="1" Margin="15,8" Background="#2a2a2a" 
                         BorderBrush="#555" BorderThickness="1">
                     <ScrollViewer Height="90" VerticalScrollBarVisibility="Auto" Padding="10">
                         <TextBlock x:Name="ActionLogTextBlock" Text="" FontFamily="Consolas" FontSize="11" 
@@ -121,7 +128,7 @@
                 </Border>
             
                 <!-- Race Result -->
-                <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="RaceResultBorder" 
+                <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" x:Name="RaceResultBorder" 
                         Margin="0,15,0,0" Padding="15" Visibility="Collapsed"
                         Background="#4CAF50">
                     <TextBlock x:Name="RaceResultLabel" Text="" FontSize="18" FontWeight="Bold" 

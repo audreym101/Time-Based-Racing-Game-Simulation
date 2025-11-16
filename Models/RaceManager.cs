@@ -63,6 +63,11 @@ namespace TimeBasedRacingGame.Models
         public RaceState RaceState { get; private set; }
 
         /// <summary>
+        /// Gets the list of all racers
+        /// </summary>
+        public List<Racer> Racers { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the RaceManager class
         /// </summary>
         /// <param name="maxTime">Maximum race time in seconds</param>
@@ -74,6 +79,15 @@ namespace TimeBasedRacingGame.Models
             IsRaceActive = false;
             RaceResult = "";
             RaceState = new RaceState();
+
+            // Initialize racers
+            Racers = new List<Racer>
+            {
+                new Racer("You", true),
+                new Racer("Speed Racer"),
+                new Racer("Lightning McQueen"),
+                new Racer("Turbo Tom")
+            };
 
             AvailableCars = new List<Car>
             {
@@ -204,6 +218,9 @@ namespace TimeBasedRacingGame.Models
             RaceState.CurrentFuel = SelectedCar.CurrentFuel;
             RaceState.CurrentSpeed = SelectedCar.CurrentSpeed;
 
+            // Update player position
+            UpdatePositions();
+
             CheckRaceConditions();
         }
 
@@ -243,6 +260,54 @@ namespace TimeBasedRacingGame.Models
         public double GetTimePercentage()
         {
             return (TimeRemaining / MaxTime) * 100;
+        }
+
+        /// <summary>
+        /// Updates racer positions based on progress
+        /// </summary>
+        private void UpdatePositions()
+        {
+            var playerRacer = Racers.First(r => r.IsPlayer);
+            playerRacer.CurrentLap = Track.CurrentLap;
+            playerRacer.LapProgress = Track.LapProgress;
+
+            // Simulate AI progress
+            var random = new Random();
+            foreach (var racer in Racers.Where(r => !r.IsPlayer))
+            {
+                if (IsRaceActive)
+                {
+                    racer.LapProgress += random.Next(8, 15);
+                    if (racer.LapProgress >= 100)
+                    {
+                        racer.LapProgress = 0;
+                        racer.CurrentLap++;
+                    }
+                }
+            }
+
+            // Calculate positions
+            var sortedRacers = Racers.OrderByDescending(r => r.GetTotalProgress()).ToList();
+            for (int i = 0; i < sortedRacers.Count; i++)
+            {
+                sortedRacers[i].Position = i + 1;
+            }
+        }
+
+        /// <summary>
+        /// Gets the player's current position
+        /// </summary>
+        /// <returns>Player position (1st, 2nd, etc.)</returns>
+        public string GetPlayerPosition()
+        {
+            var playerRacer = Racers.First(r => r.IsPlayer);
+            return playerRacer.Position switch
+            {
+                1 => "1st",
+                2 => "2nd",
+                3 => "3rd",
+                _ => $"{playerRacer.Position}th"
+            };
         }
     }
 }
