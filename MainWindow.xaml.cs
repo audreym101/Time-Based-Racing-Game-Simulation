@@ -12,6 +12,9 @@ namespace TimeBasedRacingGame
         private RaceManager raceManager;
         private DispatcherTimer gameTimer;
 
+        /// <summary>
+        /// Initializes a new instance of the MainWindow class
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
