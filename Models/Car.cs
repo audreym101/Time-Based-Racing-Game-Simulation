@@ -104,5 +104,24 @@ namespace TimeBasedRacingGame.Models
         {
             return (CurrentFuel / MaxFuel) * 100;
         }
+
+        /// <summary>
+        /// Gets detailed car information for display
+        /// </summary>
+        /// <returns>Formatted car information string</returns>
+        public string GetCarInfo()
+        {
+            string strategy = Type switch
+            {
+                CarType.SportsCar => "⚡ BALANCED PERFORMANCE - Good speed with moderate fuel efficiency",
+                CarType.EcoCar => "🌱 ECO STRATEGY - Lower speed but excellent fuel economy and high capacity", 
+                CarType.RaceCar => "🏁 SPEED DEMON - Maximum speed but high fuel consumption and low capacity",
+                _ => "Unknown car type"
+            };
+            
+            return $"🏎️ {Name}\n" +
+                   $"Max Speed: {MaxSpeed} km/h | Fuel Capacity: {MaxFuel}L | Consumption: {FuelConsumption}L/action\n" +
+                   $"{strategy}";
+        }
     }
 }

@@ -51,8 +51,7 @@ namespace TimeBasedRacingGame
             if (CarSelectionComboBox.SelectedItem is Car selectedCar)
             {
                 raceManager.SelectedCar = selectedCar;
-                CarInfoLabel.Text = $"{selectedCar.Name} - Max Speed: {selectedCar.MaxSpeed} km/h, " +
-                                   $"Fuel Capacity: {selectedCar.MaxFuel}L, Consumption: {selectedCar.FuelConsumption}L/action";
+                CarInfoLabel.Text = selectedCar.GetCarInfo();
                 StartRaceButton.IsEnabled = true;
             }
         }
@@ -183,6 +182,12 @@ namespace TimeBasedRacingGame
                 // Update action log
                 ActionLogTextBlock.Text = raceManager.RaceState.GetActionLogText();
 
+                // Update car info during race
+                if (raceManager.IsRaceActive)
+                {
+                    CarInfoLabel.Text = GetCurrentCarStatus();
+                }
+
                 // Update status
                 if (raceManager.IsRaceActive)
                 {
@@ -232,6 +237,35 @@ namespace TimeBasedRacingGame
             SpeedUpButton.IsEnabled = enabled;
             MaintainSpeedButton.IsEnabled = enabled;
             PitStopButton.IsEnabled = enabled;
+        }
+
+        /// <summary>
+        /// Gets current car status during race
+        /// </summary>
+        /// <returns>Current car status information</returns>
+        private string GetCurrentCarStatus()
+        {
+            if (raceManager.SelectedCar == null) return "";
+            
+            var car = raceManager.SelectedCar;
+            string fuelStatus = car.GetFuelPercentage() switch
+            {
+                > 75 => "🟢 FULL",
+                > 50 => "🟡 GOOD", 
+                > 25 => "🟠 LOW",
+                _ => "🔴 CRITICAL"
+            };
+            
+            string speedStatus = car.CurrentSpeed switch
+            {
+                0 => "⏸️ STOPPED",
+                < 50 => "🐌 SLOW",
+                < 100 => "🚗 MODERATE",
+                _ => "🏎️ FAST"
+            };
+            
+            return $"🏎️ {car.Name} | Speed: {car.CurrentSpeed}/{car.MaxSpeed} km/h {speedStatus} | " +
+                   $"Fuel: {car.CurrentFuel:F1}/{car.MaxFuel}L {fuelStatus}";
         }
 
         /// <summary>
